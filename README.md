@@ -1,39 +1,39 @@
 # remote-workbench
 
-원격 작업 때 SSH·파일전송·멀티탭이 도구마다 흩어지는 문제를, **SSH 셸 + 탭 + SFTP 파일트리** 최소 POC로 증명합니다. (풀 MobaXterm 클론 아님)
+원격 작업 때 SSH·파일전송·멀티탭이 흩어지는 문제를, **SSH 셸 + 탭 + SFTP 파일트리** 최소 POC로 증명합니다. (풀 MobaXterm 클론 아님)
 
-## 뭘 만들었나
+**현재 스택: Kotlin · Compose Desktop · JSch**  
+(이전 Python POC는 `legacy/python/`에 보관)
 
-| 포함 | 제외 |
-|------|------|
-| SSH 인터랙티브 셸 | X11 · 시리얼 · RDP/VNC |
-| 탭 2개 이상 | 매크로 · 클라우드 세션 동기화 |
-| SFTP 목록 · 업로드 | FTP 프로토콜 |
-| SFTP 디렉터리 탐색(파일트리) | 풀 세션 매니저 |
+## 인수조건
 
-스택: **Python 3.11+ · paramiko · Textual**
+1. SSH 셸 입출력
+2. 탭 2개 이상(독립 세션)
+3. SFTP 목록 · 업로드
+4. 디렉터리 탐색(파일트리)
 
-## 실행 3줄
+FTP · 화면 분할 · X11 · 시리얼 · RDP/VNC 제외.
+
+## 실행
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-cp .env.example .env   # 로컬 테스트 호스트만 입력
-remote-workbench
+cp .env.example .env   # 로컬 테스트 호스트만
+./gradlew run
 ```
-
-## 데모
-
-1. `.env`에 자기 테스트 SSH 호스트 설정 (회사 계정 금지)
-2. 앱 실행 → 탭 2개에서 각각 명령 입력
-3. 왼쪽 파일트리로 디렉터리 이동 → 로컬 파일 업로드
 
 ## 테스트
 
 ```bash
-pytest -q
+./gradlew test
 ```
 
-## 포트폴리오 한 줄
+## 모듈
 
-접속→셸→파일 이동을 한 화면에서 직접 구현한 1인 POC.
+```
+src/main/kotlin/workbench/
+  config/   # SSH 설정
+  ssh/      # 세션·셸
+  sftp/     # 목록·업로드·트리용 경로
+  ui/       # 탭 · 파일트리 · 셸 패널
+legacy/python/   # 이전 Python POC
+```
