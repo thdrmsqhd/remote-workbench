@@ -8,14 +8,15 @@
 
 ## 다운로드 (릴리즈)
 
-GitHub Releases: https://github.com/thdrmsqhd/remote-workbench/releases/tag/v1.0.0
+GitHub Releases: https://github.com/thdrmsqhd/remote-workbench/releases
 
 | 파일 | 용도 |
 |------|------|
-| `remote-workbench-linux-x64-1.0.0.jar` | Java 21+ 에서 `java -jar …` |
-| `remote-workbench-linux-x64-1.0.0.tar.gz` | Linux x64 앱 번들 (압축 해제 후 `bin/remote-workbench`) |
+| `remote-workbench-*.exe` / `*.msi` | **Windows** — Actions가 릴리즈에 첨부 (Actions → Release Windows 수동 실행 가능) |
+| `remote-workbench-linux-x64-*.jar` | Linux — Java 21+ 에서 `java -jar …` |
+| `remote-workbench-linux-x64-*.tar.gz` | Linux x64 앱 번들 |
 
-Windows/macOS 설치본은 해당 OS에서 `./gradlew packageUberJarForCurrentOS`로 빌드하세요.
+Windows exe는 `windows-latest` GitHub Actions에서 빌드됩니다. 태그 `v*` push 또는 Release 발행 시 자동, 또는 Actions에서 **Release Windows** 워크플로를 수동 실행하세요.
 
 ## 인수조건
 
