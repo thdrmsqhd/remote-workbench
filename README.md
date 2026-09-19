@@ -5,6 +5,18 @@
 **현재 스택: Kotlin · Compose Desktop · JSch**  
 (이전 Python POC는 `legacy/python/`에 보관)
 
+
+## 다운로드 (릴리즈)
+
+GitHub Releases: https://github.com/thdrmsqhd/remote-workbench/releases/tag/v1.0.0
+
+| 파일 | 용도 |
+|------|------|
+| `remote-workbench-linux-x64-1.0.0.jar` | Java 21+ 에서 `java -jar …` |
+| `remote-workbench-linux-x64-1.0.0.tar.gz` | Linux x64 앱 번들 (압축 해제 후 `bin/remote-workbench`) |
+
+Windows/macOS 설치본은 해당 OS에서 `./gradlew packageUberJarForCurrentOS`로 빌드하세요.
+
 ## 인수조건
 
 1. SSH 셸 입출력
