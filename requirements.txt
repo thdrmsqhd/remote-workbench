@@ -1,0 +1,4 @@
+paramiko>=3.4.0
+textual>=0.80.0
+python-dotenv>=1.0.0
+pytest>=8.0.0
