@@ -20,6 +20,7 @@ dependencies {
     implementation("com.jcraft:jsch:0.1.55")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("org.xerial:sqlite-jdbc:3.47.2.0")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
 }
