@@ -18,7 +18,8 @@ data class ServerProfile(
     val authType: AuthType = AuthType.PASSWORD,
     val password: String? = null,
     val keyPath: String? = null,
-    val remoteDir: String = "/tmp"
+    val remoteDir: String = "/tmp",
+    val envTag: String = "DEV" // PROD, STAGING, DEV
 ) {
     fun toSshConfig(): SshConfig = SshConfig(
         host = host,
@@ -62,8 +63,8 @@ class ServerProfileRepository(private val dbManager: DatabaseManager) {
         dbManager.getConnection().use { conn ->
             if (profile.id <= 0) {
                 val sql = """
-                    INSERT INTO server_profiles (name, host, port, username, auth_type, password, key_path, remote_dir)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO server_profiles (name, host, port, username, auth_type, password, key_path, remote_dir, env_tag)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """.trimIndent()
                 conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS).use { stmt ->
                     stmt.setString(1, profile.name)
@@ -74,6 +75,7 @@ class ServerProfileRepository(private val dbManager: DatabaseManager) {
                     stmt.setString(6, profile.password)
                     stmt.setString(7, profile.keyPath)
                     stmt.setString(8, profile.remoteDir)
+                    stmt.setString(9, profile.envTag)
                     stmt.executeUpdate()
                     val keys = stmt.generatedKeys
                     if (keys.next()) {
@@ -83,7 +85,7 @@ class ServerProfileRepository(private val dbManager: DatabaseManager) {
             } else {
                 val sql = """
                     UPDATE server_profiles 
-                    SET name = ?, host = ?, port = ?, username = ?, auth_type = ?, password = ?, key_path = ?, remote_dir = ?, updated_at = CURRENT_TIMESTAMP
+                    SET name = ?, host = ?, port = ?, username = ?, auth_type = ?, password = ?, key_path = ?, remote_dir = ?, env_tag = ?, updated_at = CURRENT_TIMESTAMP
                     WHERE id = ?
                 """.trimIndent()
                 conn.prepareStatement(sql).use { stmt ->
@@ -95,7 +97,8 @@ class ServerProfileRepository(private val dbManager: DatabaseManager) {
                     stmt.setString(6, profile.password)
                     stmt.setString(7, profile.keyPath)
                     stmt.setString(8, profile.remoteDir)
-                    stmt.setLong(9, profile.id)
+                    stmt.setString(9, profile.envTag)
+                    stmt.setLong(10, profile.id)
                     stmt.executeUpdate()
                 }
             }
@@ -127,7 +130,8 @@ class ServerProfileRepository(private val dbManager: DatabaseManager) {
                 authType = if (fallbackConfig.keyPath != null) AuthType.KEY else AuthType.PASSWORD,
                 password = fallbackConfig.password,
                 keyPath = fallbackConfig.keyPath?.toString(),
-                remoteDir = fallbackConfig.remoteDir
+                remoteDir = fallbackConfig.remoteDir,
+                envTag = "DEV"
             )
         } else {
             ServerProfile(
@@ -137,7 +141,8 @@ class ServerProfileRepository(private val dbManager: DatabaseManager) {
                 username = "demo",
                 authType = AuthType.PASSWORD,
                 password = "password",
-                remoteDir = "/tmp"
+                remoteDir = "/tmp",
+                envTag = "DEV"
             )
         }
         return saveProfile(initial)
@@ -152,6 +157,7 @@ class ServerProfileRepository(private val dbManager: DatabaseManager) {
         authType = runCatching { AuthType.valueOf(rs.getString("auth_type")) }.getOrDefault(AuthType.PASSWORD),
         password = rs.getString("password"),
         keyPath = rs.getString("key_path"),
-        remoteDir = rs.getString("remote_dir") ?: "/tmp"
+        remoteDir = rs.getString("remote_dir") ?: "/tmp",
+        envTag = runCatching { rs.getString("env_tag") }.getOrNull() ?: "DEV"
     )
 }

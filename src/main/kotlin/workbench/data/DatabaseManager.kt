@@ -46,11 +46,16 @@ class DatabaseManager(private val dbPath: String = defaultDbPath()) {
                         password TEXT,
                         key_path TEXT,
                         remote_dir TEXT NOT NULL DEFAULT '/tmp',
+                        env_tag TEXT NOT NULL DEFAULT 'DEV',
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     );
                     """.trimIndent()
                 )
+                // In case the table already existed without env_tag
+                runCatching {
+                    stmt.execute("ALTER TABLE server_profiles ADD COLUMN env_tag TEXT DEFAULT 'DEV';")
+                }
             }
         }
     }

@@ -47,6 +47,7 @@ class ServerProfileRepositoryTest {
         assertEquals(AuthType.PASSWORD, retrieved?.authType)
         assertEquals("secret", retrieved?.password)
         assertEquals("/var/www", retrieved?.remoteDir)
+        assertEquals("DEV", retrieved?.envTag)
     }
 
     @Test

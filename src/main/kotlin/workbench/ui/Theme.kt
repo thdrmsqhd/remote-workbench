@@ -27,6 +27,11 @@ val FileColor = Color(0xFFD4D4D8)
 val TermBg = Color(0xFF111114)
 val TermFg = Color(0xFFD4F5E2)
 
+// Server Environment Tag Colors
+val TagProd = Color(0xFFFF5252)
+val TagStaging = Color(0xFFFF922B)
+val TagDev = Color(0xFF4C8DFF)
+
 private val WorkbenchColors: ColorScheme = darkColorScheme(
     primary = Accent,
     onPrimary = OnAccent,

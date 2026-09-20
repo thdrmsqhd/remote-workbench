@@ -12,6 +12,16 @@ data class RemoteEntry(
     val size: Long,
 )
 
+fun formatFileSize(bytes: Long): String {
+    if (bytes < 1024) return "$bytes B"
+    val kb = bytes / 1024.0
+    if (kb < 1024) return String.format("%.1f KB", kb)
+    val mb = kb / 1024.0
+    if (mb < 1024) return String.format("%.1f MB", mb)
+    val gb = mb / 1024.0
+    return String.format("%.1f GB", gb)
+}
+
 class SftpClient(private val channel: ChannelSftp) {
     fun listDir(remotePath: String): List<RemoteEntry> {
         @Suppress("UNCHECKED_CAST")
@@ -35,6 +45,22 @@ class SftpClient(private val channel: ChannelSftp) {
 
     fun upload(local: Path, remote: String) {
         channel.put(local.toString(), remote)
+    }
+
+    fun download(remote: String, local: Path) {
+        channel.get(remote, local.toString())
+    }
+
+    fun delete(remote: String, isDir: Boolean) {
+        if (isDir) {
+            channel.rmdir(remote)
+        } else {
+            channel.rm(remote)
+        }
+    }
+
+    fun mkdir(remote: String) {
+        channel.mkdir(remote)
     }
 
     fun close() {
